@@ -143,6 +143,8 @@ The MCP server runs on Cloudflare Workers and proxies the public MemeStack REST 
 
 If you want to fork the *protocol behavior* and self-host a similar gallery, the [REST API](https://api.memestack.ai/openapi.json) is documented and a sufficient backend for any MCP-style wrapper.
 
+The `Dockerfile` in this repo is a thin proxy — it uses `mcp-remote` to bridge stdio MCP to the hosted HTTP endpoint, and exists only so MCP directories that require Dockerfile-based introspection (Glama, etc.) can validate the live tools/prompts/resources. End users should connect directly to `mcp.memestack.ai/mcp` per the [Install](#install) section above; the Docker image holds no source.
+
 ---
 
 ## License
