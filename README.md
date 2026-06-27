@@ -1,5 +1,7 @@
 # MemeStack MCP
 
+[![smithery badge](https://smithery.ai/badge/memestack/mcp)](https://smithery.ai/servers/memestack/mcp)
+
 Hosted [Model Context Protocol](https://modelcontextprotocol.io) server for [MemeStack](https://memestack.ai) — a searchable gallery of AI-tagged memes, infographics, charts, screenshots, and visual explainers, ranked by Lightning zaps. Free, public, no auth, no signup.
 
 ```
