@@ -81,7 +81,7 @@ Same endpoint for `initialize`, `tools/call`, `prompts/list`, `prompts/get`, `re
 
 ## What's exposed
 
-- **18 free tools + 1 enterprise stub** — full catalog: [docs/tools.md](docs/tools.md)
+- **20 tools** — 18 free read tools, 1 paid generator (`generate_meme`), 1 enterprise stub — full catalog: [docs/tools.md](docs/tools.md)
 - **6 prompts** — pre-baked workflows (topic search, top zapped, cite a meme, find a meme for a vibe, research meme evolution, trending): [docs/prompts.md](docs/prompts.md)
 - **3 resources** — attribution guide, tag taxonomy, recent uploads feed: [docs/resources.md](docs/resources.md)
 
@@ -102,6 +102,10 @@ Attribution:
 
 - `cite_image` — canonical markdown/HTML/plain attribution blocks for one or many image IDs
 
+Paid (agent payment rails — pay per call, no account):
+
+- `generate_meme` — AI image generation via Grok Imagine. 60 sats standard / 150 sats quality (or the USDC equivalent). Returns a hosted, auto-tagged, CDN-served image URL.
+
 Enterprise stub:
 
 - `submit_image` — reserved for a future agent-tier monetization spec; currently returns a polite redirect
@@ -116,11 +120,25 @@ Every list response includes a `citations_combined` block in three formats (mark
 
 ---
 
-## Tier model
+## Pricing & payments
 
-Currently everything except `submit_image` is `tier: free` with no per-call cost. IP-level rate limits apply for abuse protection. `reverse_image_search` is rate-limited to 10/min/IP since each call hashes the input image.
+Reads are free with generous daily quotas; generation is paid per call. **No account, no API key** — payment itself is the auth, over two rails:
 
-`submit_image` is `tier: enterprise` and reserved for a future agent-tier monetization flow — calling it returns a discoverable error pointing at [memestack.ai/mcp/agent-tier](https://memestack.ai/mcp/agent-tier).
+- **x402** (USDC on Base) — standard `x402/error` + `x402/payment` `_meta` flow; works out of the box with the Cloudflare Agents SDK's `withX402Client`. Heads-up: the SDK's default `maxPaymentValue` is $0.10 — raise it to use `generate_meme` quality mode (~$0.15).
+- **L402** (Lightning sats) — on REST, standard `WWW-Authenticate: L402 macaroon="…", invoice="…"` challenge; retry with `Authorization: L402 <macaroon>:<preimage>`. Over MCP, an experimental `l402/payment` `_meta` extension carries the same proof.
+
+| Tool group | Free quota | Over quota / price |
+|---|---|---|
+| Search & browse tools (`search_images`, `browse_*`, `find_meme_for_text`, `search_text_in_image`) | 200 calls/day/IP | 5 sats/call |
+| `reverse_image_search` | 10 calls/day/IP | 21 sats/call |
+| `generate_meme` | always paid | 60 sats standard / 150 sats quality |
+| Everything else (`get_image`, `cite_image`, tags, categories, leaderboard, resources, prompts) | unmetered, free | — |
+
+Paid REST twins (same prices, standard dual-header 402): `POST api.memestack.ai/v1/agent/generate` and `POST api.memestack.ai/v1/agent/reverse-search` — see the [OpenAPI spec](https://api.memestack.ai/openapi.json).
+
+One payment delivers at most one result — if a call fails or times out mid-generation, retry with the **same** payment proof to resume; you are never charged twice for one payment.
+
+`submit_image` is `tier: enterprise` and reserved for a future agent-tier flow — calling it returns a discoverable error pointing at [memestack.ai/mcp/agent-tier](https://memestack.ai/mcp/agent-tier).
 
 ---
 

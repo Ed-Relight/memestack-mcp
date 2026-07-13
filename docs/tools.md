@@ -146,6 +146,19 @@ Generate canonical attribution blocks for one or more MemeStack images. Returns 
 
 ---
 
+## Generation (paid)
+
+### `generate_meme` *(paid — 60 sats standard / 150 sats quality, or USDC equivalent)*
+
+Generate a new image from a text prompt via Grok Imagine. Paid per call over the agent payment rails — **x402** (USDC on Base; works out of the box with the Cloudflare Agents SDK `withX402Client` — raise `maxPaymentValue` above the $0.10 default for quality mode) or **L402** (Lightning sats). No account or API key; the payment is the auth. The call polls generation to completion (~10–90 s) and returns a hosted, auto-tagged, CDN-served image URL with caption and tags. If it times out or fails mid-run, retry with the **same** payment proof to resume — one payment delivers at most one image, never charged twice.
+
+- **Required**: `prompt` (string, ≤2000 chars).
+- **Optional**: `mode` (`standard` | `quality`, default `standard`), `aspect_ratio` (`1:1` | `3:4` | `16:9`, default `1:1`).
+
+Free-quota note for the read tools above: search/browse tools share 200 free calls/day/IP and `reverse_image_search` has 10/day/IP; above quota they return a dual-rail payment offer (5 and 21 sats per call respectively).
+
+---
+
 ## Write (stub)
 
 ### `submit_image` *(enterprise — currently a stub)*
