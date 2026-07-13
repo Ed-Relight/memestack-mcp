@@ -1,8 +1,8 @@
 # Tools
 
-This is a quick-reference catalog of the 19 tools exposed by the MemeStack MCP server. The authoritative source is the live `tools/list` response — see the curl command at the bottom of this page to fetch it.
+This is a quick-reference catalog of the 20 tools exposed by the MemeStack MCP server. The authoritative source is the live `tools/list` response — see the curl command at the bottom of this page to fetch it.
 
-Tiers: `free` (no auth, no cost) or `enterprise` (reserved for a future agent-tier monetization flow). Every tool is read-only and idempotent unless noted otherwise.
+Tiers: every tool is `tier: free` at the MCP protocol level — payment (where required) is enforced by the agent payment gate, not the tier system. 18 tools are free reads (some with a daily quota, above which they fall back to a metered price — see "Pricing & payments" in the [main README](../README.md)); `generate_meme` and `submit_image` are always paid, no free quota. Every tool is read-only and idempotent except the two paid tools, which are neither.
 
 ---
 
@@ -146,7 +146,7 @@ Generate canonical attribution blocks for one or more MemeStack images. Returns 
 
 ---
 
-## Generation (paid)
+## Paid tools
 
 ### `generate_meme` *(paid — 60 sats standard / 150 sats quality, or USDC equivalent)*
 
@@ -155,18 +155,14 @@ Generate a new image from a text prompt via Grok Imagine. Paid per call over the
 - **Required**: `prompt` (string, ≤2000 chars).
 - **Optional**: `mode` (`standard` | `quality`, default `standard`), `aspect_ratio` (`1:1` | `3:4` | `16:9`, default `1:1`).
 
+### `submit_image` *(paid — 100 sats/submission, or USDC equivalent)*
+
+Submit an image by URL into the MemeStack moderation review queue. Paid per call over the agent payment rails — **x402** (USDC on Base; raise `maxPaymentValue` above the Cloudflare Agents SDK's $0.10 default, since 100 sats alone exceeds it whenever BTC trades above $100k) or **L402** (Lightning sats). No account or API key; the payment is the auth. **No refund if moderation rejects the submission** (duplicate, nsfw/gore/spam, low quality, or corrupt/invalid bytes) — the fee itself is the anti-spam mechanism, and a rejection consumes the review attempt just like an acceptance does. Accepted submissions land in the `needs_review` queue awaiting human approval; if approved, they join the public gallery credited to the `MCP Agents` account. A submission rejected as a duplicate of an existing **approved** image includes a `duplicate_of` pointer (image ID + page URL) to the existing hosted copy. The call polls the outcome to completion (~10–90 s); if it times out, or a failure occurs before any submission was created (bad URL, fetch error, oversize, non-image bytes), retry with the **same** payment proof — a corrected `image_url` is accepted on retry. Each payment allows up to **10 delivery attempts** before the claim closes and a new payment is required. Submission offers (this tool's 402 response) are capped at **50 per day per IP** — once reached, the tool returns a capacity error instead of a payment offer (an already-issued offer always remains payable).
+
+- **Required**: `image_url` (string — HTTPS URL or `data:image/(jpeg|png|webp);base64,...` URL, max 8MB).
+- **Optional**: `caption` (≤200 chars), `tags` (array, ≤10 items, ≤40 chars each), `attribution` (≤200 chars) — all three are hints shown to the AI tagger and to human moderators; **never published verbatim**.
+
 Free-quota note for the read tools above: search/browse tools share 200 free calls/day/IP and `reverse_image_search` has 10/day/IP; above quota they return a dual-rail payment offer (5 and 21 sats per call respectively).
-
----
-
-## Write (stub)
-
-### `submit_image` *(enterprise — currently a stub)*
-
-Reserved for a future agent-tier monetization flow. Calling it returns a polite redirect to [memestack.ai/mcp/agent-tier](https://memestack.ai/mcp/agent-tier).
-
-- **Required**: `image_url`.
-- **Optional**: `caption`, `tags`.
 
 ---
 

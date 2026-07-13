@@ -81,7 +81,7 @@ Same endpoint for `initialize`, `tools/call`, `prompts/list`, `prompts/get`, `re
 
 ## What's exposed
 
-- **20 tools** — 18 free read tools, 1 paid generator (`generate_meme`), 1 enterprise stub — full catalog: [docs/tools.md](docs/tools.md)
+- **20 tools** — 18 free read tools, 2 paid (`generate_meme`, `submit_image`) — full catalog: [docs/tools.md](docs/tools.md)
 - **6 prompts** — pre-baked workflows (topic search, top zapped, cite a meme, find a meme for a vibe, research meme evolution, trending): [docs/prompts.md](docs/prompts.md)
 - **3 resources** — attribution guide, tag taxonomy, recent uploads feed: [docs/resources.md](docs/resources.md)
 
@@ -105,10 +105,7 @@ Attribution:
 Paid (agent payment rails — pay per call, no account):
 
 - `generate_meme` — AI image generation via Grok Imagine. 60 sats standard / 150 sats quality (or the USDC equivalent). Returns a hosted, auto-tagged, CDN-served image URL.
-
-Enterprise stub:
-
-- `submit_image` — reserved for a future agent-tier monetization spec; currently returns a polite redirect
+- `submit_image` — submit an image by URL into the moderation review queue. 100 sats/submission (or the USDC equivalent), always paid, no free quota. No refund on moderation rejection (duplicate/nsfw/spam/low-quality) — the fee is the anti-spam mechanism; accepted images await human review before publication.
 
 ---
 
@@ -124,7 +121,7 @@ Every list response includes a `citations_combined` block in three formats (mark
 
 Reads are free with generous daily quotas; generation is paid per call. **No account, no API key** — payment itself is the auth, over two rails:
 
-- **x402** (USDC on Base) — standard `x402/error` + `x402/payment` `_meta` flow; works out of the box with the Cloudflare Agents SDK's `withX402Client`. Heads-up: the SDK's default `maxPaymentValue` is $0.10 — raise it to use `generate_meme` quality mode (~$0.15).
+- **x402** (USDC on Base) — standard `x402/error` + `x402/payment` `_meta` flow; works out of the box with the Cloudflare Agents SDK's `withX402Client`. Heads-up: the SDK's default `maxPaymentValue` is $0.10 — raise it to use `generate_meme` quality mode (~$0.15) or `submit_image` (100 sats, which alone exceeds $0.10 whenever BTC trades above $100k).
 - **L402** (Lightning sats) — on REST, standard `WWW-Authenticate: L402 macaroon="…", invoice="…"` challenge; retry with `Authorization: L402 <macaroon>:<preimage>`. Over MCP, an experimental `l402/payment` `_meta` extension carries the same proof.
 
 | Tool group | Free quota | Over quota / price |
@@ -132,13 +129,14 @@ Reads are free with generous daily quotas; generation is paid per call. **No acc
 | Search & browse tools (`search_images`, `browse_*`, `find_meme_for_text`, `search_text_in_image`) | 200 calls/day/IP | 5 sats/call |
 | `reverse_image_search` | 10 calls/day/IP | 21 sats/call |
 | `generate_meme` | always paid | 60 sats standard / 150 sats quality |
+| `submit_image` | always paid | 100 sats/submission |
 | Everything else (`get_image`, `cite_image`, tags, categories, leaderboard, resources, prompts) | unmetered, free | — |
 
-Paid REST twins (same prices, standard dual-header 402): `POST api.memestack.ai/v1/agent/generate` and `POST api.memestack.ai/v1/agent/reverse-search` — see the [OpenAPI spec](https://api.memestack.ai/openapi.json).
+Paid REST twins (same prices, standard dual-header 402): `POST api.memestack.ai/v1/agent/generate`, `POST api.memestack.ai/v1/agent/reverse-search`, and `POST api.memestack.ai/v1/agent/submit` — see the [OpenAPI spec](https://api.memestack.ai/openapi.json).
 
 One payment delivers at most one result — if a call fails or times out mid-generation, retry with the **same** payment proof to resume; you are never charged twice for one payment.
 
-`submit_image` is `tier: enterprise` and reserved for a future agent-tier flow — calling it returns a discoverable error pointing at [memestack.ai/mcp/agent-tier](https://memestack.ai/mcp/agent-tier).
+`submit_image` submissions land in the moderation review queue, not directly in the public gallery — there is **no refund if moderation rejects** the submission (duplicate/nsfw/spam/low-quality), since the review attempt itself is what the fee buys.
 
 ---
 
