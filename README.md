@@ -111,7 +111,7 @@ Paid (agent payment rails — pay per call, no account):
 
 ## Citations are baked in
 
-Every list response includes a `citations_combined` block in three formats (markdown / HTML / plain) for the full set, plus a per-image `citation` on every individual image. Per-source rules differ — OWID images carry CC-BY 4.0 attribution to Our World in Data; Imgflip templates carry Imgflip attribution; direct uploads carry the uploader's display name and the MemeStack page URL.
+Every list response includes a `citations_combined` block in three formats (markdown / HTML / plain) for the full set, plus a per-image `citation` on every individual image. Per-source rules differ — OWID images carry CC-BY 4.0 attribution to Our World in Data; Imgflip templates carry Imgflip attribution; direct uploads carry the uploader's display name and the MemeStack page URL — and Verified Creator uploads link the creator's name directly to their own website (mandatory attribution).
 
 **Read `memestack://attribution-guide` once per session** for the license model and per-source rules. See [docs/resources.md](docs/resources.md).
 
