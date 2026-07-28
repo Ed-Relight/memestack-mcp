@@ -2,7 +2,7 @@
 
 [![smithery badge](https://smithery.ai/badge/memestack/mcp)](https://smithery.ai/servers/memestack/mcp)
 
-Hosted [Model Context Protocol](https://modelcontextprotocol.io) server for [MemeStack](https://memestack.ai) — a searchable gallery of AI-tagged memes, infographics, charts, screenshots, and visual explainers, ranked by Lightning zaps. Free, public, no auth, no signup.
+Hosted [Model Context Protocol](https://modelcontextprotocol.io) server for [MemeStack](https://memestack.ai) — a visual search engine for memes, infographics, charts, screenshots, and diagrams. Find images by meaning, by the OCR text printed inside them, or by visual similarity. AI-captioned, Lightning-ranked. Public, no auth, no signup — reads are free with daily quotas, generation is paid per call.
 
 ```
 https://mcp.memestack.ai/mcp
@@ -81,7 +81,7 @@ Same endpoint for `initialize`, `tools/call`, `prompts/list`, `prompts/get`, `re
 
 ## What's exposed
 
-- **20 tools** — 18 free read tools, 2 paid (`generate_meme`, `submit_image`) — full catalog: [docs/tools.md](docs/tools.md)
+- **20 tools** — 18 free reads (7 of them with a daily quota, then a few sats per call — see [Pricing &amp; payments](#pricing--payments)), 2 always paid (`generate_meme`, `submit_image`) — full catalog: [docs/tools.md](docs/tools.md)
 - **6 prompts** — pre-baked workflows (topic search, top zapped, cite a meme, find a meme for a vibe, research meme evolution, trending): [docs/prompts.md](docs/prompts.md)
 - **3 resources** — attribution guide, tag taxonomy, recent uploads feed: [docs/resources.md](docs/resources.md)
 
