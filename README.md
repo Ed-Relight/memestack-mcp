@@ -150,7 +150,12 @@ How MemeStack exposes itself to AI agents, beyond MCP:
 | `ai-plugin.json` | [memestack.ai/.well-known/ai-plugin.json](https://memestack.ai/.well-known/ai-plugin.json) | ChatGPT plugin manifest |
 | OpenAPI 3.1 | [api.memestack.ai/openapi.json](https://api.memestack.ai/openapi.json) | REST API the MCP wraps |
 | Apex MCP mirror | [memestack.ai/mcp](https://memestack.ai/mcp) | Same MCP endpoint at apex (for naive scanners) |
-| oEmbed | [api.memestack.ai/v1/oembed](https://api.memestack.ai/v1/oembed) | Photo-type oEmbed for gallery URLs |
+| MCP server card | [mcp.memestack.ai/mcp/server-card](https://mcp.memestack.ai/mcp/server-card) | SEP-2127 server card (`application/mcp-server-card+json`); mirrored at `memestack.ai/mcp/server-card` and `memestack.ai/.well-known/mcp/server-card.json` |
+| ARD manifest | [memestack.ai/.well-known/ard.json](https://memestack.ai/.well-known/ard.json) (alias `/.well-known/ai-catalog.json`) | Agentic Resource Discovery entry pointing at the server card |
+| API catalog | [memestack.ai/.well-known/api-catalog](https://memestack.ai/.well-known/api-catalog) | RFC 9727 linkset: the REST API and the MCP server with their descriptions, docs and health endpoints |
+| Agent Skill | [memestack.ai/.well-known/agent-skills/memestack/SKILL.md](https://memestack.ai/.well-known/agent-skills/memestack/SKILL.md) | agentskills.io skill — when to use MemeStack, REST quick start, tool costs, citation rule; index at `/.well-known/agent-skills/index.json` |
+| x402 Bazaar | [api.cdp.coinbase.com/platform/v2/x402/discovery/resources](https://api.cdp.coinbase.com/platform/v2/x402/discovery/resources) | Coinbase's x402 discovery catalog — the paid REST endpoints (`/v1/agent/*`) and the MCP tools `generate_meme`/`submit_image`, with body schemas, examples and prices |
+| oEmbed | [api.memestack.ai/v1/oembed](https://api.memestack.ai/v1/oembed) | Rich-type oEmbed for gallery URLs — `html` embed snippet with a via-MemeStack credit link |
 | Sitemap | [memestack.ai/sitemap.xml](https://memestack.ai/sitemap.xml) | Sitemap index with image, page, and user sub-sitemaps |
 
 ---
