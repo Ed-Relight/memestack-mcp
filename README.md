@@ -81,7 +81,7 @@ Same endpoint for `initialize`, `tools/call`, `prompts/list`, `prompts/get`, `re
 
 ## What's exposed
 
-- **20 tools** — 18 free reads (7 of them with a daily quota, then a few sats per call — see [Pricing &amp; payments](#pricing--payments)), 2 always paid (`generate_meme`, `submit_image`) — full catalog: [docs/tools.md](docs/tools.md)
+- **21 tools** — 19 free reads (8 of them with a daily quota, then a few sats per call — see [Pricing &amp; payments](#pricing--payments)), 2 always paid (`generate_meme`, `submit_image`) — full catalog: [docs/tools.md](docs/tools.md)
 - **6 prompts** — pre-baked workflows (topic search, top zapped, cite a meme, find a meme for a vibe, research meme evolution, trending): [docs/prompts.md](docs/prompts.md)
 - **3 resources** — attribution guide, tag taxonomy, recent uploads feed: [docs/resources.md](docs/resources.md)
 
@@ -90,6 +90,7 @@ Same endpoint for `initialize`, `tools/call`, `prompts/list`, `prompts/get`, `re
 Discovery and search:
 
 - `search_images` — semantic + keyword merged
+- `search_charts` — charts/infographics with stored source metadata (dataset, citation, unit, regions, displayed period); not every chart — `search_images` has wider chart coverage
 - `search_text_in_image` — OCR-only search (find screenshots of specific quotes/text)
 - `find_meme_for_text` — vibe-to-meme matcher for writing & social
 - `reverse_image_search` — phash-based "find this image" (accepts HTTPS or `data:` URLs)
@@ -126,7 +127,7 @@ Reads are free with generous daily quotas; generation is paid per call. **No acc
 
 | Tool group | Free quota | Over quota / price |
 |---|---|---|
-| Search & browse tools (`search_images`, `browse_*`, `find_meme_for_text`, `search_text_in_image`) | 200 calls/day/IP | 5 sats/call |
+| Search & browse tools (`search_images`, `search_charts`, `browse_*`, `find_meme_for_text`, `search_text_in_image`) | 200 calls/day/IP | 5 sats/call |
 | `reverse_image_search` | 10 calls/day/IP | 21 sats/call |
 | `generate_meme` | always paid | 60 sats standard / 150 sats quality |
 | `submit_image` | always paid | 100 sats/submission |

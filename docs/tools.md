@@ -1,8 +1,8 @@
 # Tools
 
-This is a quick-reference catalog of the 20 tools exposed by the MemeStack MCP server. The authoritative source is the live `tools/list` response — see the curl command at the bottom of this page to fetch it.
+This is a quick-reference catalog of the 21 tools exposed by the MemeStack MCP server. The authoritative source is the live `tools/list` response — see the curl command at the bottom of this page to fetch it.
 
-Tiers: every tool is `tier: free` at the MCP protocol level — payment (where required) is enforced by the agent payment gate, not the tier system. 18 tools are free reads (some with a daily quota, above which they fall back to a metered price — see "Pricing & payments" in the [main README](../README.md)); `generate_meme` and `submit_image` are always paid, no free quota. Every tool is read-only and idempotent except the two paid tools, which are neither.
+Tiers: every tool is `tier: free` at the MCP protocol level — payment (where required) is enforced by the agent payment gate, not the tier system. 19 tools are free reads (some with a daily quota, above which they fall back to a metered price — see "Pricing & payments" in the [main README](../README.md)); `generate_meme` and `submit_image` are always paid, no free quota. Every tool is read-only and idempotent except the two paid tools, which are neither.
 
 ---
 
@@ -15,6 +15,14 @@ Search the gallery. Runs semantic AI + keyword matching in parallel and merges r
 - **Required**: `query` (string). Alias `q` accepted — matches the REST `?q=` convention.
 - **Optional**: `tag` (single tag slug), `tags` (comma-separated AND-filter, e.g. `"bitcoin,meme"`), `limit` (1–50, default 10), `offset`, `sort` (`newest` | `popular` | `oldest`; omit for relevance ranking).
 - **Returns**: `{ images: [...], total, citations_combined }`. Each image has caption, simplified tag array, zap stats, `thumbnail_url`, `canonical_url`, `page_url`, and a per-image `citation` block.
+
+### `search_charts` *(free)*
+
+Search charts, maps and infographics that carry structured source metadata — the publishing dataset and its academic citation, the unit, the regions plotted, and the period the chart actually displays (never the dataset's wider history). Results say whether the source has published newer data since capture. `browse_by_tag`, `browse_by_category`, `get_leaderboard` and `get_mutation_group` return images without this metadata; the other search and image tools include it whenever a row exists. This tool covers only images that have stored metadata, so use `search_images` for the widest chart coverage. A chart whose displayed period could not be proven from the image itself is returned without one rather than with a guess.
+
+- **Required**: `query` (string — what the chart should show, e.g. `"global cereal yields"`).
+- **Optional**: `region` (entity exactly as the chart names it, e.g. `"World"`, `"Germany"`), `data_from`/`data_to` (years — matches charts whose DISPLAYED period overlaps the range; charts with no provable displayed period are excluded, and the underlying dataset's wider history is never used for this test), `chart_source` (upstream source key, e.g. `"owid"`), `limit` (1–50, default 10), `offset`.
+- **Returns**: `{ images: [...], total, citations_combined }` — same shape as `search_images`; each image also carries a `chart` block when MemeStack holds one.
 
 ### `search_text_in_image` *(free)*
 
