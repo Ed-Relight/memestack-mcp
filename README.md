@@ -99,6 +99,8 @@ Discovery and search:
 - `popular_tags`, `tag_autocomplete`, `get_tag_profile`
 - `get_image`, `get_user_profile`, `get_leaderboard`, `get_mutation_group`
 
+Safe by default: every search and browse tool excludes images MemeStack classifies as controversial (partisan attack memes, slurs, dark humour — library content, but not a default result). Pass `include_controversial: true` on `search_images`, `search_charts`, `search_text_in_image`, `find_meme_for_text`, `reverse_image_search`, `find_similar`, `find_related`, `browse_images` or `browse_by_tag` to include them; each such result is marked `[controversial]` in the text view and carries `controversial: true` in the structured payload. By-id tools (`get_image`, `get_mutation_group`, `cite_image`) always answer and carry the flag. The REST equivalent is `?content=all` on the browse endpoints (`content=safe` is the default; any other value is `400 INVALID_CONTENT`).
+
 Attribution:
 
 - `cite_image` — canonical markdown/HTML/plain attribution blocks for one or many image IDs

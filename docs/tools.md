@@ -4,6 +4,8 @@ This is a quick-reference catalog of the 21 tools exposed by the MemeStack MCP s
 
 Tiers: every tool is `tier: free` at the MCP protocol level — payment (where required) is enforced by the agent payment gate, not the tier system. 19 tools are free reads (some with a daily quota, above which they fall back to a metered price — see "Pricing & payments" in the [main README](../README.md)); `generate_meme` and `submit_image` are always paid, no free quota. Every tool is read-only and idempotent except the two paid tools, which are neither.
 
+Safe by default: the nine list-returning tools — `search_images`, `search_charts`, `search_text_in_image`, `find_meme_for_text`, `reverse_image_search`, `find_similar`, `find_related`, `browse_images`, `browse_by_tag` — take an optional `include_controversial` (boolean, default `false`). Left off, results exclude images MemeStack classifies as controversial; set to `true`, they are included, marked `[controversial]` in the text view and carrying `controversial: true` in the structured payload. A non-boolean value is rejected before any request. By-id tools (`get_image`, `get_mutation_group`, `cite_image`) always answer and carry the flag. Over REST the same switch is `?content=all` on the browse endpoints.
+
 ---
 
 ## Discovery & search
