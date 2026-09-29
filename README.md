@@ -67,6 +67,31 @@ In `~/.continue/config.json`, add under `mcpServers`:
 "memestack": { "url": "https://mcp.memestack.ai/mcp" }
 ```
 
+### Cline
+
+In Cline's MCP settings (`cline_mcp_settings.json`), add the server with the camelCase `streamableHttp` type — without it Cline falls back to SSE and the endpoint answers 405:
+
+```json
+{
+  "mcpServers": {
+    "memestack": {
+      "type": "streamableHttp",
+      "url": "https://mcp.memestack.ai/mcp",
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
+```
+
+### Gemini CLI
+
+```bash
+gemini extensions install https://github.com/Ed-Relight/memestack-mcp
+```
+
+The extension manifest ([gemini-extension.json](gemini-extension.json)) points Gemini CLI at the hosted endpoint over Streamable HTTP (`httpUrl`).
+
 ### Raw JSON-RPC (any HTTP client)
 
 ```bash
@@ -77,13 +102,23 @@ curl -X POST https://mcp.memestack.ai/mcp \
 
 Same endpoint for `initialize`, `tools/call`, `prompts/list`, `prompts/get`, `resources/list`, `resources/read`. Protocol version: `2025-06-18`.
 
+### Claude.ai and ChatGPT (directory endpoint)
+
+Chat apps get a second endpoint built for their connector directories:
+
+```
+https://mcp.memestack.ai/mcp/directory
+```
+
+It serves the **19 read tools only** — no paid tools, no payment offers, no daily quota — and its results never include images classified controversial (the `include_controversial` argument does not exist there; a by-id lookup of such an image answers "not found"). Prompts, resources and citations are the same as on `/mcp`. Add it by URL as a custom connector (Streamable HTTP, no authentication). Tool calls are rate-limited per minute; over the limit a call answers "Too many requests from this client" — wait a minute and retry.
+
 ---
 
 ## What's exposed
 
 - **21 tools** — 19 free reads (8 of them with a daily quota, then a few sats per call — see [Pricing &amp; payments](#pricing--payments)), 2 always paid (`generate_meme`, `submit_image`) — full catalog: [docs/tools.md](docs/tools.md)
 - **6 prompts** — pre-baked workflows (topic search, top zapped, cite a meme, find a meme for a vibe, research meme evolution, trending): [docs/prompts.md](docs/prompts.md)
-- **3 resources** — attribution guide, tag taxonomy, recent uploads feed: [docs/resources.md](docs/resources.md)
+- **4 resources** — attribution guide, tag taxonomy, recent uploads feed, and the `memestack://top/{period}` template (top zapped images): [docs/resources.md](docs/resources.md)
 
 ### Tools at a glance
 
@@ -98,6 +133,8 @@ Discovery and search:
 - `browse_images`, `browse_by_tag`, `browse_by_category`, `list_categories`
 - `popular_tags`, `tag_autocomplete`, `get_tag_profile`
 - `get_image`, `get_user_profile`, `get_leaderboard`, `get_mutation_group`
+
+Honest search results (rolling out — the server labels results only while its honest-search switch is on): when results carry `match`, `search_images`, `search_charts`, `search_text_in_image` and `find_meme_for_text` label each one `"strong"` (MemeStack has evidence it matches your query) or `"closest"` (the nearest thing it has). Strong results come first; closest ones are capped and marked `[closest match]` in the text view. The first page starts with a `note` when nothing matched strongly, and `has_more` says whether another page exists (`total` counts strong matches only). Without labels there is no `match`, `note` or `has_more`: a page shorter than `limit` is the last.
 
 Safe by default: every search and browse tool excludes images MemeStack classifies as controversial (partisan attack memes, slurs, dark humour — library content, but not a default result). Pass `include_controversial: true` on `search_images`, `search_charts`, `search_text_in_image`, `find_meme_for_text`, `reverse_image_search`, `find_similar`, `find_related`, `browse_images` or `browse_by_tag` to include them; each such result is marked `[controversial]` in the text view and carries `controversial: true` in the structured payload. By-id tools (`get_image`, `get_mutation_group`, `cite_image`) always answer and carry the flag. The REST equivalent is `?content=all` on the browse endpoints (`content=safe` is the default; any other value is `400 INVALID_CONTENT`).
 

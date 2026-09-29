@@ -46,3 +46,13 @@ The last 50 approved images on MemeStack, newest first, each with its citation b
 
 - Real-time "what's new" feeds in agent UIs
 - Periodic polling without paying the cost of running a full search
+
+## `memestack://top/{period}` (template)
+
+**MIME**: `application/json` · listed by `resources/templates/list`
+
+The top 50 zapped images for `period` ∈ {`day`, `week`, `month`, `all`}, each with its citation block, plus a combined citation block. Cached server-side for 5 minutes. Example: `memestack://top/week`.
+
+---
+
+On the directory endpoint (`https://mcp.memestack.ai/mcp/directory`, for Claude.ai and ChatGPT) the same resources are served, and none of them ever includes an image classified controversial.

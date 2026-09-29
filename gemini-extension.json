@@ -1,0 +1,10 @@
+{
+  "name": "memestack",
+  "version": "1.3.0",
+  "description": "Search memes, infographics, charts and screenshots by meaning, in-image text or visual similarity, with citations.",
+  "mcpServers": {
+    "memestack": {
+      "httpUrl": "https://mcp.memestack.ai/mcp"
+    }
+  }
+}
