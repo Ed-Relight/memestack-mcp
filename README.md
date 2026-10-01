@@ -110,7 +110,7 @@ Chat apps get a second endpoint built for their connector directories:
 https://mcp.memestack.ai/mcp/directory
 ```
 
-It serves the **19 read tools only** — no paid tools, no payment offers, no daily quota — and its results never include images classified controversial (the `include_controversial` argument does not exist there; a by-id lookup of such an image answers "not found"). Prompts, resources and citations are the same as on `/mcp`. Add it by URL as a custom connector (Streamable HTTP, no authentication). Tool calls are rate-limited per minute; over the limit a call answers "Too many requests from this client" — wait a minute and retry.
+It serves the **19 read tools only** — no paid tools, no payment offers, no daily quota — and its results never include images classified controversial (the `include_controversial` argument does not exist there; a by-id lookup of such an image answers "not found"). Prompts, resources and citations are the same as on `/mcp`. Add it by URL as a custom connector (Streamable HTTP, no authentication). Tool calls are rate-limited per minute; over the limit a call answers "Too many requests from this client" — wait a minute and retry. In ChatGPT (and other MCP Apps hosts) image results appear as a carousel of image cards.
 
 ---
 
