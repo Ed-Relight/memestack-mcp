@@ -53,6 +53,6 @@ Find memes that capture a vibe / idea / concept, ready to embed with attribution
 
 ## `research_meme_evolution`
 
-Research how a meme has evolved on MemeStack via mutation groups. Accepts either a UUID (calls `get_mutation_group`) or a template slug (calls `browse_images` filtered to that template).
+Research how a meme has evolved on MemeStack through its tracked variants. Accepts either a UUID (calls `get_meme_variants`) or a template slug (calls `browse_images` filtered to that template).
 
 - **Required**: `meme_or_template` — image UUID or meme template slug.

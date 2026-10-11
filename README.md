@@ -14,7 +14,7 @@ Every list response returns citation blocks (markdown / HTML / plain) ready to p
 
 ## Install
 
-This is a hosted server. No clone, no build, no local environment. Point any MCP-aware client at the endpoint.
+This is a hosted server. No clone, no build, no local environment. Point any MCP-aware client at the endpoint. Every snippet below was checked against the client's own documentation on 2026-10-11; the current list, with a link to each client's docs, is on [memestack.ai/mcp-server](https://memestack.ai/mcp-server).
 
 ### Claude Code
 
@@ -22,9 +22,24 @@ This is a hosted server. No clone, no build, no local environment. Point any MCP
 claude mcp add --transport http memestack https://mcp.memestack.ai/mcp
 ```
 
-### Claude Desktop
+Or in a project `.mcp.json` — a remote server needs `"type": "http"`:
 
-Edit `claude_desktop_config.json` (`%APPDATA%\Claude\` on Windows, `~/Library/Application Support/Claude/` on macOS):
+```json
+{
+  "mcpServers": {
+    "memestack": {
+      "type": "http",
+      "url": "https://mcp.memestack.ai/mcp"
+    }
+  }
+}
+```
+
+### Claude (claude.ai and Claude Desktop)
+
+Add MemeStack from the [Connectors Directory](https://claude.ai/directory/memestack), or as a custom connector: **Customize → Connectors → + Add → Add custom connector** with the directory endpoint `https://mcp.memestack.ai/mcp/directory` (see [Chat apps](#chat-apps-directory-endpoint) below). Every plan can; a Free account can add one custom connector.
+
+Claude Desktop's `claude_desktop_config.json` takes local servers only. To use the full `/mcp` endpoint there, bridge it with `mcp-remote`:
 
 ```json
 {
@@ -33,16 +48,6 @@ Edit `claude_desktop_config.json` (`%APPDATA%\Claude\` on Windows, `~/Library/Ap
       "command": "npx",
       "args": ["-y", "mcp-remote", "https://mcp.memestack.ai/mcp"]
     }
-  }
-}
-```
-
-Recent Claude Desktop versions support direct HTTP MCP servers — if yours does, you can drop the `mcp-remote` wrapper:
-
-```json
-{
-  "mcpServers": {
-    "memestack": { "url": "https://mcp.memestack.ai/mcp" }
   }
 }
 ```
@@ -59,12 +64,52 @@ Edit `~/.cursor/mcp.json` (or per-project `.cursor/mcp.json`):
 }
 ```
 
-### Continue.dev (VS Code / JetBrains)
+### VS Code (GitHub Copilot)
 
-In `~/.continue/config.json`, add under `mcpServers`:
+`.mcp.json` at the workspace root, or `~/.copilot/mcp-config.json` for every workspace (the older `.vscode/mcp.json` with `"servers"` still loads, but VS Code now calls it deprecated):
 
 ```json
-"memestack": { "url": "https://mcp.memestack.ai/mcp" }
+{
+  "mcpServers": {
+    "memestack": {
+      "type": "http",
+      "url": "https://mcp.memestack.ai/mcp"
+    }
+  }
+}
+```
+
+### Devin Desktop (formerly Windsurf)
+
+```bash
+devin mcp add memestack https://mcp.memestack.ai/mcp
+```
+
+### Gemini CLI
+
+```bash
+gemini extensions install https://github.com/Ed-Relight/memestack-mcp
+```
+
+The extension manifest ([gemini-extension.json](gemini-extension.json)) points Gemini CLI at the hosted endpoint over Streamable HTTP (`httpUrl`). Without the extension:
+
+```bash
+gemini mcp add --transport http memestack https://mcp.memestack.ai/mcp
+```
+
+That writes `.gemini/settings.json` in the project; add `--scope user` for `~/.gemini/settings.json`.
+
+### OpenAI Codex CLI
+
+```bash
+codex mcp add memestack --url https://mcp.memestack.ai/mcp
+```
+
+Or in `~/.codex/config.toml` (shared with the ChatGPT desktop app and the Codex IDE extension):
+
+```toml
+[mcp_servers.memestack]
+url = "https://mcp.memestack.ai/mcp"
 ```
 
 ### Cline
@@ -84,25 +129,94 @@ In Cline's MCP settings (`cline_mcp_settings.json`), add the server with the cam
 }
 ```
 
-### Gemini CLI
+The Remote Servers tab does the same (Transport "Streamable HTTP"), and so does the Cline CLI:
 
 ```bash
-gemini extensions install https://github.com/Ed-Relight/memestack-mcp
+cline mcp add memestack https://mcp.memestack.ai/mcp --transport http --yes
 ```
 
-The extension manifest ([gemini-extension.json](gemini-extension.json)) points Gemini CLI at the hosted endpoint over Streamable HTTP (`httpUrl`).
+### Zed
+
+In Zed's settings (`zed: open settings file`), or Settings → AI → MCP Servers → Add Remote Server:
+
+```json
+{
+  "context_servers": {
+    "memestack": { "url": "https://mcp.memestack.ai/mcp" }
+  }
+}
+```
+
+### Goose
+
+`goose configure` → Add Extension → Remote Extension (Streamable HTTP), or in `~/.config/goose/config.yaml` (Windows: `%APPDATA%\Block\goose\config\config.yaml`):
+
+```yaml
+extensions:
+  memestack:
+    type: streamable_http
+    name: memestack
+    enabled: true
+    uri: "https://mcp.memestack.ai/mcp"
+    headers: {}
+    env_keys: []
+    envs: {}
+    timeout: 300
+```
+
+### LM Studio
+
+LM Studio 0.3.17 or later: Program tab → Install → Edit `mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "memestack": { "url": "https://mcp.memestack.ai/mcp" }
+  }
+}
+```
+
+### Continue
+
+Create `.continue/mcpServers/memestack.yaml` (MCP tools work in agent mode):
+
+```yaml
+name: MemeStack
+version: 0.0.1
+schema: v1
+mcpServers:
+  - name: memestack
+    type: streamable-http
+    url: https://mcp.memestack.ai/mcp
+```
+
+### Clients without remote MCP support
+
+Bridge the endpoint with [`mcp-remote`](https://www.npmjs.com/package/mcp-remote):
+
+```json
+{
+  "mcpServers": {
+    "memestack": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.memestack.ai/mcp"]
+    }
+  }
+}
+```
 
 ### Raw JSON-RPC (any HTTP client)
 
 ```bash
 curl -X POST https://mcp.memestack.ai/mcp \
   -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
 ```
 
 Same endpoint for `initialize`, `tools/call`, `prompts/list`, `prompts/get`, `resources/list`, `resources/read`. Protocol version: `2025-06-18`.
 
-### Claude.ai and ChatGPT (directory endpoint)
+### Chat apps (directory endpoint)
 
 Chat apps get a second endpoint built for their connector directories:
 
@@ -111,6 +225,14 @@ https://mcp.memestack.ai/mcp/directory
 ```
 
 It serves the **19 read tools only** — no paid tools, no payment offers, no daily quota — and its results never include images classified controversial (the `include_controversial` argument does not exist there; a by-id lookup of such an image answers "not found"). Prompts, resources and citations are the same as on `/mcp`. Add it by URL as a custom connector (Streamable HTTP, no authentication). Tool calls are rate-limited per minute; over the limit a call answers "Too many requests from this client" — wait a minute and retry. In ChatGPT (and other MCP Apps hosts) image results appear as a carousel of image cards.
+
+Where each app keeps the setting (checked 2026-10-11):
+
+- **Claude** — see [above](#claude-claudeai-and-claude-desktop).
+- **ChatGPT** (web) — Plugins → + → Add custom MCP server → Server URL → Create as a plugin. Business and Enterprise/Edu; Pro can connect with read/fetch permissions in developer mode.
+- **Mistral Le Chat** — Connectors → + Add Connector → Custom MCP Connector. Administrators (on Free, Pro and Student, the account owner).
+- **Perplexity** — Account settings → Connectors → + Custom connector → Remote, transport Streamable HTTP. Pro, Max and Enterprise.
+- **Microsoft Copilot Studio** — an agent's Tools page → Add a tool → New tool → Model Context Protocol, authentication None. Needs generative orchestration (not in the Copilot Studio for Teams plan).
 
 ---
 
@@ -132,11 +254,11 @@ Discovery and search:
 - `find_similar` / `find_related` — neighbors of a known image (visual phash / semantic embedding)
 - `browse_images`, `browse_by_tag`, `browse_by_category`, `list_categories`
 - `popular_tags`, `tag_autocomplete`, `get_tag_profile`
-- `get_image`, `get_user_profile`, `get_leaderboard`, `get_mutation_group`
+- `get_image`, `get_user_profile`, `get_leaderboard`, `get_meme_variants`
 
 Honest search results (rolling out — the server labels results only while its honest-search switch is on): when results carry `match`, `search_images`, `search_charts`, `search_text_in_image` and `find_meme_for_text` label each one `"strong"` (MemeStack has evidence it matches your query) or `"closest"` (the nearest thing it has). Strong results come first; closest ones are capped and marked `[closest match]` in the text view. The first page starts with a `note` when nothing matched strongly, and `has_more` says whether another page exists (`total` counts strong matches only). Without labels there is no `match`, `note` or `has_more`: a page shorter than `limit` is the last.
 
-Safe by default: every search and browse tool excludes images MemeStack classifies as controversial (partisan attack memes, slurs, dark humour — library content, but not a default result). Pass `include_controversial: true` on `search_images`, `search_charts`, `search_text_in_image`, `find_meme_for_text`, `reverse_image_search`, `find_similar`, `find_related`, `browse_images` or `browse_by_tag` to include them; each such result is marked `[controversial]` in the text view and carries `controversial: true` in the structured payload. By-id tools (`get_image`, `get_mutation_group`, `cite_image`) always answer and carry the flag. The REST equivalent is `?content=all` on the browse endpoints (`content=safe` is the default; any other value is `400 INVALID_CONTENT`).
+Safe by default: every search and browse tool excludes images MemeStack classifies as controversial (partisan attack memes, slurs, dark humour — library content, but not a default result). Pass `include_controversial: true` on `search_images`, `search_charts`, `search_text_in_image`, `find_meme_for_text`, `reverse_image_search`, `find_similar`, `find_related`, `browse_images` or `browse_by_tag` to include them; each such result is marked `[controversial]` in the text view and carries `controversial: true` in the structured payload. By-id tools (`get_image`, `get_meme_variants`, `cite_image`) always answer and carry the flag. The REST equivalent is `?content=all` on the browse endpoints (`content=safe` is the default; any other value is `400 INVALID_CONTENT`).
 
 Attribution:
 

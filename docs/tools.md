@@ -4,7 +4,7 @@ This is a quick-reference catalog of the 21 tools exposed by the MemeStack MCP s
 
 Tiers: every tool is `tier: free` at the MCP protocol level — payment (where required) is enforced by the agent payment gate, not the tier system. 19 tools are free reads (some with a daily quota, above which they fall back to a metered price — see "Pricing & payments" in the [main README](../README.md)); `generate_meme` and `submit_image` are always paid, no free quota. Every tool is read-only and idempotent except the two paid tools, which are neither.
 
-Safe by default: the nine list-returning tools — `search_images`, `search_charts`, `search_text_in_image`, `find_meme_for_text`, `reverse_image_search`, `find_similar`, `find_related`, `browse_images`, `browse_by_tag` — take an optional `include_controversial` (boolean, default `false`). Left off, results exclude images MemeStack classifies as controversial; set to `true`, they are included, marked `[controversial]` in the text view and carrying `controversial: true` in the structured payload. A non-boolean value is rejected before any request. By-id tools (`get_image`, `get_mutation_group`, `cite_image`) always answer and carry the flag. Over REST the same switch is `?content=all` on the browse endpoints.
+Safe by default: the nine list-returning tools — `search_images`, `search_charts`, `search_text_in_image`, `find_meme_for_text`, `reverse_image_search`, `find_similar`, `find_related`, `browse_images`, `browse_by_tag` — take an optional `include_controversial` (boolean, default `false`). Left off, results exclude images MemeStack classifies as controversial; set to `true`, they are included, marked `[controversial]` in the text view and carrying `controversial: true` in the structured payload. A non-boolean value is rejected before any request. By-id tools (`get_image`, `get_meme_variants`, `cite_image`) always answer and carry the flag. Over REST the same switch is `?content=all` on the browse endpoints.
 
 ---
 
@@ -20,7 +20,7 @@ Search the gallery. Runs semantic AI + keyword matching in parallel and merges r
 
 ### `search_charts` *(free)*
 
-Search charts, maps and infographics that carry stored metadata of two kinds. Charts from Our World in Data and three statistical publishers (provenance `authoritative`) carry the publishing dataset and its citation, the unit, the regions plotted, the period the chart actually displays (never the dataset's wider history), and whether the source has published newer data since capture. Community-uploaded charts (provenance `extracted`) carry a title, source line, unit and period that were read from the image itself and not checked against the original data. `browse_by_tag`, `browse_by_category`, `get_leaderboard` and `get_mutation_group` return images without this metadata; the other search and image tools include it whenever a row exists. This tool covers only images that have stored metadata, so use `search_images` for the widest chart coverage. A chart whose displayed period could not be proven from the image itself is returned without one rather than with a guess.
+Search charts, maps and infographics that carry stored metadata of two kinds. Charts from Our World in Data and three statistical publishers (provenance `authoritative`) carry the publishing dataset and its citation, the unit, the regions plotted, the period the chart actually displays (never the dataset's wider history), and whether the source has published newer data since capture. Community-uploaded charts (provenance `extracted`) carry a title, source line, unit and period that were read from the image itself and not checked against the original data. `browse_by_tag`, `browse_by_category`, `get_leaderboard` and `get_meme_variants` return images without this metadata; the other search and image tools include it whenever a row exists. This tool covers only images that have stored metadata, so use `search_images` for the widest chart coverage. A chart whose displayed period could not be proven from the image itself is returned without one rather than with a guess.
 
 - **Required**: `query` (string — what the chart should show, e.g. `"global cereal yields"`).
 - **Optional**: `region` (entity exactly as the chart names it, e.g. `"World"`, `"Germany"`), `data_from`/`data_to` (years — matches charts whose DISPLAYED period overlaps the range; charts with no provable displayed period are excluded, and the underlying dataset's wider history is never used for this test), `chart_source` (source key: `"owid"`, `"usda_ers"`, `"eurostat"`, `"eea"` or `"extracted"`), `limit` (1–50, default 10), `offset`.
@@ -37,7 +37,7 @@ OCR-only search — matches only the `text_in_image` field, not captions or tags
 
 Vibe-to-meme matcher. Find a meme that captures an idea or concept — ready to embed with citation blocks. Use this when writing posts, articles, or social content.
 
-- **Required**: `vibe` (string).
+- **Required**: `vibe` (string — the core idea in one to three words, e.g. `procrastination`; a long descriptive phrase finds only weaker "closest" matches).
 - **Optional**: `limit` (default 5).
 
 ### `reverse_image_search` *(free, rate-limited 10/min/IP)*
@@ -67,9 +67,9 @@ Full metadata for one image — caption, alt text, tags, OCR text, dimensions, M
 
 - **Required**: `id` (image UUID).
 
-### `get_mutation_group` *(free)*
+### `get_meme_variants` *(free)*
 
-Get all variants of a meme template tracked on MemeStack. Returns the dominant image plus every variant in the same mutation group, with citation blocks for each. Use this to research how a meme has evolved or to find variants of a known image.
+Get every variant of a meme tracked on MemeStack, given the ID of any one of them. Returns the dominant (most popular) version plus each variant, with citation blocks for each. Use this to research how a meme has evolved or to find variants of a known image. Formerly `get_mutation_group`; that name still answers `tools/call`.
 
 - **Required**: `image_id` (UUID).
 
