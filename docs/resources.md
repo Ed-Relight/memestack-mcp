@@ -26,7 +26,7 @@ curl -X POST https://mcp.memestack.ai/mcp \
 
 How to cite MemeStack images: license model, recommended formats (markdown / HTML / plain), per-source attribution rules.
 
-**Read this once at session start.** It explains the per-source license differences — OWID images carry CC-BY 4.0 attribution back to Our World in Data; Imgflip templates carry Imgflip attribution; 4chan archives carry archive-site attribution; Telegram bot submissions and direct uploads carry the uploader's display name — and Verified Creator uploads link the creator's name directly to their own website (mandatory attribution). The `citation` block on every tool response is pre-formatted against these rules — you can paste it verbatim and stay compliant.
+**Read this once at session start.** It explains the per-source differences — OWID, Eurostat and EEA charts are CC-BY 4.0 and USDA ERS charts are US public domain, each credited to its publisher; Verified Creator uploads are all rights reserved and link the creator's name directly to their own website (mandatory attribution); every other image (direct uploads, Telegram submissions, Imgflip templates, 4chan archives, X saves, AI-generated and agent-submitted images) carries no license from MemeStack — its rights stay with their owners, and its citation records where it was found. The `citation` block on every tool response is pre-formatted against these rules: paste it verbatim, but it is attribution, not permission to reuse.
 
 ## `memestack://taxonomy`
 

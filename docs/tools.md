@@ -35,10 +35,11 @@ OCR-only search — matches only the `text_in_image` field, not captions or tags
 
 ### `find_meme_for_text` *(free)*
 
-Vibe-to-meme matcher. Find a meme that captures an idea or concept — ready to embed with citation blocks. Use this when writing posts, articles, or social content.
+Vibe-to-meme matcher. Find a meme that captures an idea or concept — ready to embed with citation blocks. Use this when writing posts, articles, or social content. Returns only images tagged as memes (the gallery's Memes filter), so it may come back empty when no meme fits. Use `search_images` to search every kind of image.
 
 - **Required**: `vibe` (string — the core idea in one to three words, e.g. `procrastination`; a long descriptive phrase finds only weaker "closest" matches).
-- **Optional**: `limit` (default 5).
+- **Optional**: `limit` (1–20, default 5).
+- **Returns**: `{ images: [...], citations_combined }` — the same image shape as `search_images`, without `total`. `images` may be empty when no meme fits.
 
 ### `reverse_image_search` *(free, rate-limited 10/min/IP)*
 

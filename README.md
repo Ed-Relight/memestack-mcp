@@ -265,7 +265,7 @@ Discovery and search:
 - `search_images` — semantic + keyword merged
 - `search_charts` — charts/infographics with stored source metadata (dataset, citation, unit, regions, displayed period); not every chart — `search_images` has wider chart coverage
 - `search_text_in_image` — OCR-only search (find screenshots of specific quotes/text)
-- `find_meme_for_text` — vibe-to-meme matcher for writing & social
+- `find_meme_for_text` — vibe-to-meme matcher for writing & social (only images tagged as memes, so it may come back empty; `search_images` covers every kind of image)
 - `reverse_image_search` — phash-based "find this image" (accepts HTTPS or `data:` URLs)
 - `find_similar` / `find_related` — neighbors of a known image (visual phash / semantic embedding)
 - `browse_images`, `browse_by_tag`, `browse_by_category`, `list_categories`
@@ -350,4 +350,4 @@ The `Dockerfile` in this repo is a thin proxy — it uses `mcp-remote` to bridge
 
 ## License
 
-MIT — covers the snippets and docs in this repo. The hosted MemeStack service is governed separately by [memestack.ai/terms](https://memestack.ai/terms). Image content carries per-source licenses, surfaced in each image's `citation` block.
+MIT — covers the snippets and docs in this repo. The hosted MemeStack service is governed separately by [memestack.ai/terms](https://memestack.ai/terms). Images keep their owners' rights: only the open-data publisher charts (CC BY 4.0 or US public domain) and Verified Creator work come with license terms, set out in [memestack.ai/license](https://memestack.ai/license). MemeStack grants no license to any other image, and a `citation` block is attribution, not permission to reuse.
