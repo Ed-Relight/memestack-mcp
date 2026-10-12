@@ -1,0 +1,18 @@
+{
+  "name": "memestack",
+  "owner": {
+    "name": "MemeStack",
+    "email": "contact@memestack.ai",
+    "url": "https://memestack.ai"
+  },
+  "description": "MemeStack's plugin: find memes, charts, infographics and screenshots by meaning, by the text inside them, or by a similar image.",
+  "plugins": [
+    {
+      "name": "memestack",
+      "source": "./",
+      "description": "Search MemeStack by meaning, by the text printed inside an image, or by visual similarity, with a ready-to-paste citation on every result.",
+      "category": "productivity",
+      "tags": ["memes", "charts", "images", "search", "citations", "mcp"]
+    }
+  ]
+}

@@ -35,6 +35,20 @@ Or in a project `.mcp.json` — a remote server needs `"type": "http"`:
 }
 ```
 
+#### Or as a plugin (adds a skill)
+
+This repo is also a Claude Code plugin marketplace. The plugin installs the same server plus a
+`find-image` skill that tells Claude which tool answers which request and to keep the citation:
+
+```bash
+/plugin marketplace add Ed-Relight/memestack-mcp
+/plugin install memestack@memestack
+```
+
+From a shell: `claude plugin marketplace add Ed-Relight/memestack-mcp` then
+`claude plugin install memestack@memestack`. If you also use the claude.ai connector, Claude Code
+lists the tools twice (one copy per server); either one is enough.
+
 ### Claude (claude.ai and Claude Desktop)
 
 Add MemeStack from the [Connectors Directory](https://claude.ai/directory/memestack), or as a custom connector: **Customize → Connectors → + Add → Add custom connector** with the directory endpoint `https://mcp.memestack.ai/mcp/directory` (see [Chat apps](#chat-apps-directory-endpoint) below). Every plan can; a Free account can add one custom connector.
@@ -54,7 +68,9 @@ Claude Desktop's `claude_desktop_config.json` takes local servers only. To use t
 
 ### Cursor
 
-Edit `~/.cursor/mcp.json` (or per-project `.cursor/mcp.json`):
+[![Add the MemeStack MCP server to Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/en/install-mcp?name=memestack&config=eyJ1cmwiOiJodHRwczovL21jcC5tZW1lc3RhY2suYWkvbWNwIn0%3D)
+
+One click opens Cursor's install prompt ([Cursor's install links](https://cursor.com/docs/context/mcp/install-links)). This repo is also a Cursor plugin (`.cursor-plugin/plugin.json` + `mcp.json`, with the `find-image` skill). Or edit `~/.cursor/mcp.json` (or per-project `.cursor/mcp.json`):
 
 ```json
 {
@@ -66,7 +82,7 @@ Edit `~/.cursor/mcp.json` (or per-project `.cursor/mcp.json`):
 
 ### VS Code (GitHub Copilot)
 
-`.mcp.json` at the workspace root, or `~/.copilot/mcp-config.json` for every workspace (the older `.vscode/mcp.json` with `"servers"` still loads, but VS Code now calls it deprecated):
+One click: the **Add to VS Code** link on [memestack.ai/mcp-server](https://memestack.ai/mcp-server) (a [`vscode:mcp/install`](https://code.visualstudio.com/api/extension-guides/ai/mcp) link, which GitHub does not render). Or `.mcp.json` at the workspace root, or `~/.copilot/mcp-config.json` for every workspace (the older `.vscode/mcp.json` with `"servers"` still loads, but VS Code now calls it deprecated):
 
 ```json
 {

@@ -104,7 +104,7 @@ List all 16 image categories. Call this first to discover what `category` values
 
 ### `get_tag_profile` *(free)*
 
-Tag profile (description, image count, total zaps, related tags) without fetching any images. Use `browse_by_tag` instead if you also want images.
+Tag profile (description, public image count, related tags) without fetching any images. A topic hub adds a one-sentence definition and live facts: image formats, chart sources with licences, the period the charts show, regions, and related hubs. Use `browse_by_tag` instead if you also want images.
 
 - **Required**: `tag` (slug).
 

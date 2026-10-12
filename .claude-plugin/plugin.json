@@ -1,0 +1,15 @@
+{
+  "name": "memestack",
+  "displayName": "MemeStack",
+  "version": "1.3.0",
+  "description": "Find memes, infographics, charts and screenshots by meaning, by the text printed inside them, or by visual similarity, with a ready-to-paste citation on every result.",
+  "author": {
+    "name": "MemeStack",
+    "email": "contact@memestack.ai",
+    "url": "https://memestack.ai"
+  },
+  "homepage": "https://memestack.ai/mcp-server",
+  "repository": "https://github.com/Ed-Relight/memestack-mcp",
+  "license": "MIT",
+  "keywords": ["memes", "charts", "infographics", "image search", "ocr", "citations", "mcp"]
+}
