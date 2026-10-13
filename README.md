@@ -263,7 +263,7 @@ Where each app keeps the setting (checked 2026-10-11):
 Discovery and search:
 
 - `search_images` — semantic + keyword merged
-- `search_charts` — charts/infographics with stored source metadata (dataset, citation, unit, regions, displayed period); not every chart — `search_images` has wider chart coverage
+- `search_charts` — charts/infographics with stored source metadata (dataset, citation, unit, regions, displayed period); not every chart — `search_images` has wider chart coverage. `publisher_only: true` (here and on `search_images`) keeps only charts imported from Our World in Data, USDA ERS, Eurostat or the EEA
 - `search_text_in_image` — OCR-only search (find screenshots of specific quotes/text)
 - `find_meme_for_text` — vibe-to-meme matcher for writing & social (only images tagged as memes, so it may come back empty; `search_images` covers every kind of image)
 - `reverse_image_search` — phash-based "find this image" (accepts HTTPS or `data:` URLs)
@@ -272,7 +272,9 @@ Discovery and search:
 - `popular_tags`, `tag_autocomplete`, `get_tag_profile`
 - `get_image`, `get_user_profile`, `get_leaderboard`, `get_meme_variants`
 
-Honest search results (rolling out — the server labels results only while its honest-search switch is on): when results carry `match`, `search_images`, `search_charts`, `search_text_in_image` and `find_meme_for_text` label each one `"strong"` (MemeStack has evidence it matches your query) or `"closest"` (the nearest thing it has). Strong results come first; closest ones are capped and marked `[closest match]` in the text view. The first page starts with a `note` when nothing matched strongly, and `has_more` says whether another page exists (`total` counts strong matches only). Without labels there is no `match`, `note` or `has_more`: a page shorter than `limit` is the last.
+Honest search results (rolling out — the server labels results only while its honest-search switch is on): when results carry `match`, `search_images`, `search_charts`, `search_text_in_image` and `find_meme_for_text` label each one `"strong"` (MemeStack has evidence it matches your query) or `"closest"` (the nearest thing it has). Strong results come first; closest ones are capped and marked `[closest match]` in the text view. The first page starts with a `note` when nothing matched strongly, and `has_more` says whether another page exists (`total` counts strong matches only). Without labels there is no `match`, `note` or `has_more`: a page shorter than `limit` is the last. With labels, `match_quality` sums the search up: `strong` (it has a strong match), `closest_only` (every result is only the nearest guess — do not present one as the answer) or `none`.
+
+Reuse rights: every image carries `rights` — `source` (`publisher` / `creator` / `community`), the licence and its URL, the credit line (`attribution`), and `commercial_use` (`yes` / `no` / `unknown`; `unknown` is never a guess — Our World in Data charts can plot third-party data under its own terms, and MemeStack licenses no community upload). The `citation` says how to credit an image; `rights` says whether it may be reused. `cite_image` carries both.
 
 Safe by default: every search and browse tool excludes images MemeStack classifies as controversial (partisan attack memes, slurs, dark humour — library content, but not a default result). Pass `include_controversial: true` on `search_images`, `search_charts`, `search_text_in_image`, `find_meme_for_text`, `reverse_image_search`, `find_similar`, `find_related`, `browse_images` or `browse_by_tag` to include them; each such result is marked `[controversial]` in the text view and carries `controversial: true` in the structured payload. By-id tools (`get_image`, `get_meme_variants`, `cite_image`) always answer and carry the flag. The REST equivalent is `?content=all` on the browse endpoints (`content=safe` is the default; any other value is `400 INVALID_CONTENT`).
 
