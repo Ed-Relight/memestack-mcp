@@ -1,6 +1,6 @@
 # Tools
 
-This is a quick-reference catalog of the 21 tools exposed by the MemeStack MCP server. The authoritative source is the live `tools/list` response — see the curl command at the bottom of this page to fetch it.
+This is a quick-reference catalog of the 21 tools exposed by the MemeStack MCP server. Since 1.5.0, `tools/list` on `/mcp` shows the core eight (`search_images`, `search_text_in_image`, `search_charts`, `find_meme_for_text`, `reverse_image_search`, `find_similar`, `get_image`, `cite_image`) plus the two paid tools; the others answer when called by name. The authoritative source is the live `tools/list` response — see the curl command at the bottom of this page to fetch it.
 
 Tiers: every tool is `tier: free` at the MCP protocol level — payment (where required) is enforced by the agent payment gate, not the tier system. 19 tools are free reads (some with a daily quota, above which they fall back to a metered price — see "Pricing & payments" in the [main README](../README.md)); `generate_meme` and `submit_image` are always paid, no free quota. Every tool is read-only and idempotent except the two paid tools, which are neither.
 

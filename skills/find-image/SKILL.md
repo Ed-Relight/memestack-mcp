@@ -18,10 +18,8 @@ looking like another picture. The tools come from the `memestack` MCP server thi
 | an image with specific words written on it (a quote, a sign, a screenshot) | `search_text_in_image` |
 | a chart with its source, unit, regions and the period it shows | `search_charts` |
 | where an image they already have appears, or near-copies of it | `reverse_image_search` (an https URL or a `data:` URL) |
-| more like a result they liked | `find_related` (same meaning) or `find_similar` (same look) |
-| every version of a meme | `get_meme_variants` |
+| more like a result they liked | `find_similar` |
 | the full record of one image (caption, OCR text, tags, chart data) | `get_image` |
-| images under a topic | `browse_by_tag` (check the slug with `tag_autocomplete` first) |
 
 Write queries the way a person describes the picture: what it shows or says, not file names. If
 the first search comes back with only closest matches, rephrase once (shorter, or quote the text on

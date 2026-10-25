@@ -240,7 +240,7 @@ Chat apps get a second endpoint built for their connector directories:
 https://mcp.memestack.ai/mcp/directory
 ```
 
-It serves the **19 read tools only** — no paid tools, no payment offers, no daily quota — and its results never include images classified controversial (the `include_controversial` argument does not exist there; a by-id lookup of such an image answers "not found"). Prompts, resources and citations are the same as on `/mcp`. Add it by URL as a custom connector (Streamable HTTP, no authentication). Tool calls are rate-limited per minute; over the limit a call answers "Too many requests from this client" — wait a minute and retry. In ChatGPT (and other MCP Apps hosts) image results appear as a carousel of image cards.
+It lists **18 read tools** (every read tool except `get_leaderboard`, which still answers by name) — no paid tools, no payment offers, no daily quota — and its results never include images classified controversial (the `include_controversial` argument does not exist there; a by-id lookup of such an image answers "not found"). Resources and citations are the same as on `/mcp`; `prompts/list` there shows five prompts — every one but `top_zapped`, whose tool it does not list (it still answers `prompts/get` by name). Add it by URL as a custom connector (Streamable HTTP, no authentication). Tool calls are rate-limited per minute; over the limit a call answers "Too many requests from this client" — wait a minute and retry. In ChatGPT (and other MCP Apps hosts) image results appear as a carousel of image cards.
 
 Where each app keeps the setting (checked 2026-10-11):
 
@@ -254,8 +254,8 @@ Where each app keeps the setting (checked 2026-10-11):
 
 ## What's exposed
 
-- **21 tools** — 19 free reads (8 of them with a daily quota, then a fraction of a cent per call — see [Pricing &amp; payments](#pricing--payments)), 2 always paid (`generate_meme`, `submit_image`) — full catalog: [docs/tools.md](docs/tools.md)
-- **6 prompts** — pre-baked workflows (topic search, top zapped, cite a meme, find a meme for a vibe, research meme evolution, trending): [docs/prompts.md](docs/prompts.md)
+- **21 tools**, of which `tools/list` shows a core set by default — `search_images`, `search_text_in_image`, `search_charts`, `find_meme_for_text`, `reverse_image_search`, `find_similar`, `get_image`, `cite_image`, plus the two paid tools; every tool still answers by name. In all: 19 free reads (8 of them with a daily quota, then a fraction of a cent per call — see [Pricing &amp; payments](#pricing--payments)), 2 always paid (`generate_meme`, `submit_image`) — full catalog: [docs/tools.md](docs/tools.md)
+- **6 prompts** — pre-baked workflows (topic search, top zapped, cite a meme, find a meme for a vibe, research meme evolution, trending). `prompts/list` shows a prompt only while every tool it uses is listed, so by default it shows three — `search_memes`, `cite_this_meme`, `find_a_meme_for_vibe`; the other three still answer `prompts/get` by name: [docs/prompts.md](docs/prompts.md)
 - **4 resources** — attribution guide, tag taxonomy, recent uploads feed, and the `memestack://top/{period}` template (top zapped images): [docs/resources.md](docs/resources.md)
 
 ### Tools at a glance

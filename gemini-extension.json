@@ -1,6 +1,6 @@
 {
   "name": "memestack",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Search memes, infographics, charts and screenshots by meaning, in-image text or visual similarity, with citations.",
   "mcpServers": {
     "memestack": {
