@@ -1,8 +1,8 @@
 # Tools
 
-This is a quick-reference catalog of the 21 tools exposed by the MemeStack MCP server. Since 1.5.0, `tools/list` on `/mcp` shows the core eight (`search_images`, `search_text_in_image`, `search_charts`, `find_meme_for_text`, `reverse_image_search`, `find_similar`, `get_image`, `cite_image`) plus the two paid tools; the others answer when called by name. The authoritative source is the live `tools/list` response — see the curl command at the bottom of this page to fetch it.
+This is a quick-reference catalog of the 22 tools exposed by the MemeStack MCP server. Since 1.5.0, `tools/list` on `/mcp` shows the core set — since 1.6.0 nine: `search_images`, `search_text_in_image`, `search_charts`, `find_meme_for_text`, `reverse_image_search`, `find_similar`, `get_image`, `get_receipts`, `cite_image` — plus the two paid tools; the others answer when called by name. The authoritative source is the live `tools/list` response — see the curl command at the bottom of this page to fetch it.
 
-Tiers: every tool is `tier: free` at the MCP protocol level — payment (where required) is enforced by the agent payment gate, not the tier system. 19 tools are free reads (some with a daily quota, above which they fall back to a metered price — see "Pricing & payments" in the [main README](../README.md)); `generate_meme` and `submit_image` are always paid, no free quota. Every tool is read-only and idempotent except the two paid tools, which are neither.
+Tiers: every tool is `tier: free` at the MCP protocol level — payment (where required) is enforced by the agent payment gate, not the tier system. 20 tools are free reads (some with a daily quota, above which they fall back to a metered price — see "Pricing & payments" in the [main README](../README.md)); `generate_meme` and `submit_image` are always paid, no free quota. Every tool is read-only and idempotent except the two paid tools, which are neither.
 
 Safe by default: the nine list-returning tools — `search_images`, `search_charts`, `search_text_in_image`, `find_meme_for_text`, `reverse_image_search`, `find_similar`, `find_related`, `browse_images`, `browse_by_tag` — take an optional `include_controversial` (boolean, default `false`). Left off, results exclude images MemeStack classifies as controversial; set to `true`, they are included, marked `[controversial]` in the text view and carrying `controversial: true` in the structured payload. A non-boolean value is rejected before any request. By-id tools (`get_image`, `get_meme_variants`, `cite_image`) always answer and carry the flag. Over REST the same switch is `?content=all` on the browse endpoints.
 
@@ -69,6 +69,13 @@ Semantically-related neighbors of a known image (AI embedding similarity — sim
 Full metadata for one image — caption, alt text, tags, OCR text, dimensions, MIME, zap stats, URLs, citation.
 
 - **Required**: `id` (image UUID).
+
+### `get_receipts` *(free, since 1.6.0)*
+
+The receipts for one image — where it came from (who added it and when, the credit printed on it, its publisher, how many versions MemeStack holds), what it claims about the world (each checkable claim restated neutrally, with the source the image itself names) and what the data says (charts from Our World in Data, Eurostat, USDA ERS and the EEA that measure the same thing, with period, unit and the publisher's page). No verdict: the claims are the image's own, and an empty `data` list means MemeStack holds no publisher chart for that measure. The first ask for an image reads it and can take several seconds; `claims.status` is `unavailable` when it could not be read this time. `get_image` carries the receipts as `receipts` once they have been read.
+
+- **Required**: `id` (image UUID).
+- **Returns**: `{ image_id, origin, claims: { status, items: [{ claim, cites, data }], sources_named }, read_at, note }`.
 
 ### `get_meme_variants` *(free)*
 

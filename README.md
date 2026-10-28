@@ -254,7 +254,7 @@ Where each app keeps the setting (checked 2026-10-11):
 
 ## What's exposed
 
-- **21 tools**, of which `tools/list` shows a core set by default — `search_images`, `search_text_in_image`, `search_charts`, `find_meme_for_text`, `reverse_image_search`, `find_similar`, `get_image`, `cite_image`, plus the two paid tools; every tool still answers by name. In all: 19 free reads (8 of them with a daily quota, then a fraction of a cent per call — see [Pricing &amp; payments](#pricing--payments)), 2 always paid (`generate_meme`, `submit_image`) — full catalog: [docs/tools.md](docs/tools.md)
+- **22 tools**, of which `tools/list` shows a core set by default — `search_images`, `search_text_in_image`, `search_charts`, `find_meme_for_text`, `reverse_image_search`, `find_similar`, `get_image`, `get_receipts`, `cite_image`, plus the two paid tools; every tool still answers by name. In all: 20 free reads (8 of them with a daily quota, then a fraction of a cent per call — see [Pricing &amp; payments](#pricing--payments)), 2 always paid (`generate_meme`, `submit_image`) — full catalog: [docs/tools.md](docs/tools.md)
 - **6 prompts** — pre-baked workflows (topic search, top zapped, cite a meme, find a meme for a vibe, research meme evolution, trending). `prompts/list` shows a prompt only while every tool it uses is listed, so by default it shows three — `search_memes`, `cite_this_meme`, `find_a_meme_for_vibe`; the other three still answer `prompts/get` by name: [docs/prompts.md](docs/prompts.md)
 - **4 resources** — attribution guide, tag taxonomy, recent uploads feed, and the `memestack://top/{period}` template (top zapped images): [docs/resources.md](docs/resources.md)
 
@@ -271,6 +271,7 @@ Discovery and search:
 - `browse_images`, `browse_by_tag`, `browse_by_category`, `list_categories`
 - `popular_tags`, `tag_autocomplete`, `get_tag_profile`
 - `get_image`, `get_user_profile`, `get_leaderboard`, `get_meme_variants`
+- `get_receipts` — where an image came from, the claims it makes, and publisher charts that measure the same thing (no verdict)
 
 Honest search results (rolling out — the server labels results only while its honest-search switch is on): when results carry `match`, `search_images`, `search_charts`, `search_text_in_image` and `find_meme_for_text` label each one `"strong"` (MemeStack has evidence it matches your query) or `"closest"` (the nearest thing it has). Strong results come first; closest ones are capped and marked `[closest match]` in the text view. The first page starts with a `note` when nothing matched strongly, and `has_more` says whether another page exists (`total` counts strong matches only). Without labels there is no `match`, `note` or `has_more`: a page shorter than `limit` is the last. With labels, `match_quality` sums the search up: `strong` (it has a strong match), `closest_only` (every result is only the nearest guess — do not present one as the answer) or `none`.
 
@@ -310,7 +311,7 @@ Reads are free with generous daily quotas; generation is paid per call. Every pr
 | `reverse_image_search` | 10 calls/day/IP | $0.02/call |
 | `generate_meme` | always paid | $0.08 standard / $0.20 quality |
 | `submit_image` | always paid | $0.10/submission |
-| Everything else (`get_image`, `cite_image`, tags, categories, leaderboard, resources, prompts) | unmetered, free | — |
+| Everything else (`get_image`, `get_receipts`, `cite_image`, tags, categories, leaderboard, resources, prompts) | unmetered, free | — |
 
 The sats amount for each price right now: `GET api.memestack.ai/v1/prices`. Paid REST twins (same prices, standard dual-header 402): `POST api.memestack.ai/v1/agent/generate`, `POST api.memestack.ai/v1/agent/reverse-search`, and `POST api.memestack.ai/v1/agent/submit` — see the [OpenAPI spec](https://api.memestack.ai/openapi.json).
 

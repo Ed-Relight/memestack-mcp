@@ -20,6 +20,7 @@ looking like another picture. The tools come from the `memestack` MCP server thi
 | where an image they already have appears, or near-copies of it | `reverse_image_search` (an https URL or a `data:` URL) |
 | more like a result they liked | `find_similar` |
 | the full record of one image (caption, OCR text, tags, chart data) | `get_image` |
+| whether an image is true or where it comes from: its origin, its claims, the publishers' charts on the same measure | `get_receipts` (no verdict — present it as evidence) |
 
 Write queries the way a person describes the picture: what it shows or says, not file names. If
 the first search comes back with only closest matches, rephrase once (shorter, or quote the text on
