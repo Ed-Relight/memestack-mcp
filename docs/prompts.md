@@ -38,7 +38,7 @@ See what's trending on MemeStack right now. Wraps `browse_images` with `sort: "t
 
 ## `top_zapped`
 
-*Not listed by default* (`get_leaderboard` is not a core tool; not listed on `/mcp/directory` either); `prompts/get` by name.
+*Not listed by default* (`get_leaderboard` is not a core tool); `prompts/get` by name on `/mcp`. `/mcp/directory` does not serve `get_leaderboard`, so it neither lists nor answers this prompt.
 
 Find the most zapped (tipped with Lightning sats) images over a time period.
 
